@@ -22,6 +22,11 @@ jobs:
         run: npm install
       - name: Run Tests
         run: npm test
+        env:
+          RAKUTEN_TRIP_API_KEY: ${{ secrets.RAKUTEN_TRIP_API_KEY }}
+          RAKUTEN_TRIP_CONTENT_BASE_URL: ${{ secrets.RAKUTEN_TRIP_CONTENT_BASE_URL }}
+          RAKUTEN_TRIP_BOOKING_BASE_URL: ${{ secrets.RAKUTEN_TRIP_BOOKING_BASE_URL }}
+          RAKUTEN_TRIP_USER: ${{ secrets.RAKUTEN_TRIP_USER }}
 
   update_draft_release:
     needs: [ci]
