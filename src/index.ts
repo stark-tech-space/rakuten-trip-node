@@ -8,6 +8,7 @@ import { Currency, Locale, CountryCode } from './isoTypes';
 export enum ApiCategory {
 	CONTENT,
 	BOOKING,
+	GUARANTEE,
 }
 
 export enum ImageSize {
@@ -454,10 +455,31 @@ export type PostCancelInput = {
 
 export type PostCancelOutput = BookingRecord;
 
+export type CardInfo = {
+	cardNo: string;
+	cardType: BookingCardType;
+	name: string;
+	expMM: string;
+	expYY: string;
+	cvc: string;
+};
+
+export type PostPaymentGuaranteeInput = {
+	bookingId: string;
+	cardInfo: CardInfo;
+	sessionId?: string;
+};
+
+export type PostPaymentGuaranteeOutput = {
+	bookingId: string;
+	guaranteeId: string;
+};
+
 export type RakutenTripConstructorInput = {
 	apiKey: string;
 	baseUrlForContent: string;
 	baseUrlForBooking: string;
+	baseUrlForGuarantee: string;
 	userAgent?: string;
 };
 
@@ -678,6 +700,18 @@ type BookingRecordResponse = {
 	supplier_hotel_id: string;
 };
 
+type PostPaymentGuaranteeBody = {
+	booking_id: string;
+	card_info: {
+		card_no: string;
+		card_type: BookingCardType;
+		name: string;
+		exp_mm: string;
+		exp_yy: string;
+		cvc: string;
+	};
+};
+
 type Request = {
 	url: string;
 	method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD' | 'OPTIONS';
@@ -692,7 +726,8 @@ type Request = {
 		| PostBookingPolicyBody
 		| PostPreBookBody
 		| PostBookBody
-		| PostCancelBody;
+		| PostCancelBody
+		| PostPaymentGuaranteeBody;
 	requestHeaders?: {
 		sessionId?: string;
 	};
@@ -702,6 +737,7 @@ export default class RakutenTrip {
 	private apiKey: string;
 	private baseUrlForContent: string;
 	private baseUrlForBooking: string;
+	private baseUrlForGuarantee: string;
 	private userAgent: string;
 
 	constructor(input: RakutenTripConstructorInput) {
@@ -709,11 +745,13 @@ export default class RakutenTrip {
 			apiKey,
 			baseUrlForContent = '',
 			baseUrlForBooking = '',
+			baseUrlForGuarantee = '',
 			userAgent = '',
 		} = input;
 		this.apiKey = apiKey;
 		this.baseUrlForContent = baseUrlForContent;
 		this.baseUrlForBooking = baseUrlForBooking;
+		this.baseUrlForGuarantee = baseUrlForGuarantee;
 		this.userAgent = userAgent;
 	}
 
@@ -735,6 +773,8 @@ export default class RakutenTrip {
 			case ApiCategory.BOOKING:
 				baseUrl = this.baseUrlForBooking;
 				break;
+			case ApiCategory.GUARANTEE:
+				baseUrl = this.baseUrlForGuarantee;
 		}
 
 		const requestUrl = querystring.stringifyUrl({
@@ -1777,5 +1817,52 @@ export default class RakutenTrip {
 			ApiCategory.BOOKING
 		);
 		return this.bookingRecordTransformation(response);
+	}
+
+	// need testing card info
+	async postPaymentGuarantee(
+		input: PostPaymentGuaranteeInput
+	): Promise<PostPaymentGuaranteeOutput> {
+		const {
+			bookingId,
+			cardInfo: {
+				cardNo: card_no,
+				cardType: card_type,
+				name,
+				expMM: exp_mm,
+				expYY: exp_yy,
+				cvc,
+			},
+			sessionId,
+		} = input;
+
+		const requestBody: PostPaymentGuaranteeBody = {
+			booking_id: bookingId,
+			card_info: {
+				card_no,
+				card_type,
+				name,
+				exp_mm,
+				exp_yy,
+				cvc,
+			},
+		};
+
+		const { booking_id, guarantee_id } = await this.request(
+			{
+				url: '/',
+				method: 'POST',
+				requestBody,
+				requestHeaders: {
+					sessionId,
+				},
+			},
+			ApiCategory.GUARANTEE
+		);
+
+		return {
+			bookingId: booking_id,
+			guaranteeId: guarantee_id,
+		};
 	}
 }
