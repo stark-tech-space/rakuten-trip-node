@@ -15,6 +15,7 @@ const rakutenTrip = new RakutenTrip({
 	apiKey: process.env.RAKUTEN_TRIP_API_KEY || '',
 	baseUrlForContent: process.env.RAKUTEN_TRIP_CONTENT_BASE_URL || '',
 	baseUrlForBooking: process.env.RAKUTEN_TRIP_BOOKING_BASE_URL || '',
+	baseUrlForGuarantee: process.env.RAKUTEN_TRIP_GUARANTEE_BASE_URL || '',
 	userAgent: process.env.RAKUTEN_TRIP_USER || '',
 });
 
