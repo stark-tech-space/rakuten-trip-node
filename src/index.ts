@@ -230,8 +230,8 @@ export type Money = {
 };
 
 export type TaxesAndFees = {
-	total: Money;
-	estimateTotal: Money;
+	total?: Money;
+	estimateTotal?: Money;
 };
 
 export type HotelPackage = {
