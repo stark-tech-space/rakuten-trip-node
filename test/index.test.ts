@@ -1,11 +1,9 @@
-import RakutenTrip, { Lang } from '../src/index';
+import RakutenTrip, { Lang, Currency, CountryCode } from '../src/index';
 import dotenv from 'dotenv';
 
 import randomNumber from 'random-number-csprng';
 
 import addYears from 'date-fns/fp/addYears';
-
-import { Currency, Locale, CountryCode } from '../src/isoTypes';
 
 dotenv.config({
 	path: `${__dirname}/../.env`,
@@ -60,7 +58,7 @@ describe.skip('Rakuten Booking API Test', () => {
 			adultCount: 1,
 			currency: Currency.TWD,
 			sourceMarket: [CountryCode.TW],
-			locale: Locale.zh_Hant_TW,
+			locale: Lang.zh_CN,
 		});
 		console.log('hotelList', JSON.stringify(hotelList));
 
@@ -72,7 +70,7 @@ describe.skip('Rakuten Booking API Test', () => {
 			adultCount: 1,
 			currency: Currency.TWD,
 			sourceMarket: [CountryCode.TW],
-			locale: Locale.zh_Hant_TW,
+			locale: Lang.zh_CN,
 			sessionId: hotelList.sessionId,
 		});
 		console.log('hotelRooms', JSON.stringify(hotelRooms));
@@ -88,7 +86,7 @@ describe.skip('Rakuten Booking API Test', () => {
 					adultCount: 1,
 					currency: Currency.TWD,
 					sourceMarket: [CountryCode.TW],
-					locale: Locale.zh_Hant_TW,
+					locale: Lang.zh_CN,
 				},
 				package: hotelPackage,
 				sessionId: hotelList.sessionId,

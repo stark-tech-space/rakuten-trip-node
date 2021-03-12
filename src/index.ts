@@ -3,7 +3,9 @@ import formatISO from 'date-fns/fp/formatISO';
 import querystring from 'query-string';
 import fetch, { RequestInit, Headers } from 'node-fetch';
 
-import { Currency, Locale, CountryCode } from './isoTypes';
+import { Currency, CountryCode } from './isoTypes';
+
+export * from './isoTypes';
 
 export enum ApiCategory {
 	CONTENT,
@@ -193,7 +195,7 @@ export type GetHotelListInput = {
 	children?: number[];
 	currency: Currency;
 	sourceMarket: CountryCode[];
-	locale?: Locale;
+	locale?: Lang;
 	sessionId?: string;
 };
 
@@ -274,7 +276,7 @@ export type GetHotelRoomsInput = {
 	children?: number[];
 	currency: Currency;
 	sourceMarket: CountryCode[];
-	locale?: Locale;
+	locale?: Lang;
 	sessionId?: string;
 };
 
@@ -423,7 +425,7 @@ export type BookingRecord = {
 	contactPerson: ContactPersonResponse;
 	roomLeadGuests: RoomLeadGuestResponse[];
 	sourceMarket: CountryCode[];
-	locale: Locale;
+	locale: Lang;
 	isCustomer: boolean;
 	credentialTag?: string;
 	supplierName?: string;
@@ -517,7 +519,7 @@ type GetHotelListParameters = {
 	children?: number[];
 	currency: Currency;
 	source_market: string;
-	locale?: Locale;
+	locale?: Lang;
 };
 
 type GetHotelRoomsParameters = {
@@ -529,7 +531,7 @@ type GetHotelRoomsParameters = {
 	children?: number[];
 	currency: Currency;
 	source_market: string;
-	locale?: Locale;
+	locale?: Lang;
 };
 
 type HotelPackageResponse = {
@@ -696,7 +698,7 @@ type BookingRecordResponse = {
 		remarks: string;
 	}[];
 	source_market: string;
-	locale: Locale;
+	locale: Lang;
 	is_customer: boolean;
 	credential_tag?: string;
 	supplier_name?: string;
@@ -1402,7 +1404,7 @@ export default class RakutenTrip {
 			children = [],
 			currency,
 			sourceMarket: source_market,
-			locale = Locale.en_US,
+			locale = Lang.en_US,
 			sessionId,
 		} = input;
 
