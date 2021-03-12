@@ -566,8 +566,8 @@ type HotelPackageResponse = {
 		}[];
 	};
 	taxes_and_fees?: {
-		total: Money;
-		estimate_total: Money;
+		total?: Money;
+		estimate_total?: Money;
 	};
 	supplier?: string;
 };
