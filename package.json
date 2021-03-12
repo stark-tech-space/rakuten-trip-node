@@ -1,6 +1,6 @@
 {
 	"name": "@stark-tech-space/rakuten-trip-node",
-	"version": "0.2.0-beta.2",
+	"version": "0.2.0-beta.3",
 	"description": "Rakuten Travel Api node implementation",
 	"main": "lib/index.js",
 	"scripts": {
