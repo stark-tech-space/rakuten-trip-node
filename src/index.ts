@@ -11,6 +11,12 @@ export enum ApiCategory {
 	GUARANTEE,
 }
 
+export enum Lang {
+	en_US = 'en-US',
+	ja_JP = 'ja-JP',
+	zh_CN = 'zh-CN',
+}
+
 export enum ImageSize {
 	XS = 'xs',
 	S = 's',
@@ -106,7 +112,7 @@ export type PostPropertiesInput = {
 		facilities: boolean;
 		images: boolean;
 	};
-	lang: Locale[];
+	lang: Lang;
 	propertyCodes: string[];
 };
 
@@ -1182,7 +1188,7 @@ export default class RakutenTrip {
 
 		const requestParams: PostPropertiesParameters = {
 			extends: propertyExtends.join(','),
-			lang: lang.join(','),
+			lang,
 		};
 		const requestBody: PostPropertiesBody = {
 			property_codes: propertyCodes,

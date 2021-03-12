@@ -1,4 +1,4 @@
-import RakutenTrip from '../src/index';
+import RakutenTrip, { Lang } from '../src/index';
 import dotenv from 'dotenv';
 
 import randomNumber from 'random-number-csprng';
@@ -22,10 +22,11 @@ const rakutenTrip = new RakutenTrip({
 describe('Rakuten Content API Test', () => {
 	it('should pass the assertions', async () => {
 		const properties = await rakutenTrip.getMyPropertyList({
-			since: addYears(-15)(new Date()),
+			since: addYears(-1)(new Date()),
 			page: 1,
 			size: 50,
 		});
+		console.log('properties', JSON.stringify(properties));
 
 		const property = await rakutenTrip.postProperties({
 			extends: {
@@ -34,19 +35,22 @@ describe('Rakuten Content API Test', () => {
 				facilities: true,
 				images: true,
 			},
-			lang: [Locale.en_US],
-			propertyCodes: ['TJRf'],
+			lang: Lang.zh_CN,
+			propertyCodes: [properties.myPropertyList[0].propertyCode],
 		});
+		console.log('property', JSON.stringify(property));
 
-		const facilities = await rakutenTrip.getPropertyFacilities();
+		// const facilities = await rakutenTrip.getPropertyFacilities();
+		// console.log('facilities', JSON.stringify(facilities));
 
-		const hotelChangelog = await rakutenTrip.getHotelsChangelog({
-			updatedAt: new Date(),
-		});
+		// const hotelChangelog = await rakutenTrip.getHotelsChangelog({
+		// 	updatedAt: new Date(),
+		// });
+		// console.log('hotelChangelog', JSON.stringify(hotelChangelog));
 	});
 });
 
-describe('Rakuten Booking API Test', () => {
+describe.skip('Rakuten Booking API Test', () => {
 	it('should pass the assertions', async () => {
 		const hotelList = await rakutenTrip.getHotelList({
 			hotelIdList: ['TJRf'],
@@ -116,6 +120,26 @@ describe('Rakuten Booking API Test', () => {
 				sessionId: hotelList.sessionId,
 			});
 			console.log('preBooking', JSON.stringify(preBooking));
+
+			const clientReference2 = await randomNumber(0, 100000);
+			const preBooking2 = await rakutenTrip.postPreBook({
+				bookingPolicyId: bookingPolicy.bookingPolicyId,
+				clientReference: `TestOrder-${clientReference2}`,
+				roomLeadGuests: [
+					{
+						firstName: 'Test',
+						lastName: 'Klockwork',
+						nationality: [CountryCode.TW],
+					},
+				],
+				contactPerson: {
+					firstName: 'Test',
+					lastName: 'Klockwork',
+					contactNo: '+886955940336',
+				},
+				sessionId: hotelList.sessionId,
+			});
+			console.log('preBooking2', JSON.stringify(preBooking2));
 
 			const booking = await rakutenTrip.postBook({
 				bookingId: preBooking.bookingId,
