@@ -59,14 +59,14 @@ jobs:
     runs-on: ubuntu-latest
     steps: # Does a checkout of your repository at the pushed commit SHA
       - uses: actions/checkout@v2
-      # Setup .npmrc file to publish to npm
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '12.x'
-          registry-url: 'https://registry.npmjs.org'
-          scope: '@stark-tech-space'
       - run: npm install
       - run: npm run build --if-present
+      # Setup .npmrc file to publish to GitHub Packages
+      - uses: actions/setup-node@v1
+        with:
+          registry-url: 'https://npm.pkg.github.com'
+          # Defaults to the user or organization that owns the workflow file
+          scope: '@stark-tech-space'
       # Publish to GitHub Packages
       - name: Publish to Github Packages
         run: npm publish
