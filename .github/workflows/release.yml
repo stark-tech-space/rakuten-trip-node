@@ -67,17 +67,6 @@ jobs:
           scope: '@stark-tech-space'
       - run: npm install
       - run: npm run build --if-present
-      # Publish to npm
-      - name: Publish to NPM
-        run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      # Setup .npmrc file to publish to GitHub Packages
-      - uses: actions/setup-node@v1
-        with:
-          registry-url: 'https://npm.pkg.github.com'
-          # Defaults to the user or organization that owns the workflow file
-          scope: '@stark-tech-space'
       # Publish to GitHub Packages
       - name: Publish to Github Packages
         run: npm publish
